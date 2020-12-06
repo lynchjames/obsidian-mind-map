@@ -30,10 +30,10 @@ jobs:
         zip -r ${{ env.PLUGIN_NAME }}.zip ${{ env.PLUGIN_NAME }}
         ls
         echo "::set-output name=tag_name::$(git tag --sort version:refname | tail -n 1)"
-    - name: Test
-      id: test
-      run: |
-        npm run test
+    # - name: Test
+    #   id: test
+    #   run: |
+    #     npm run test
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
