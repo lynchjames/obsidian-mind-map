@@ -35,7 +35,6 @@
   },
   "dependencies": {
     "markmap-lib": "^0.10.2",
-    "markmap-toolbar": "^0.1.4",
     "markmap-view": "^0.1.2"
   }
 }
