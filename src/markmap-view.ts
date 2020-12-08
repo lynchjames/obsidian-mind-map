@@ -1,9 +1,11 @@
-import { EventRef, ItemView, Vault, Workspace, WorkspaceLeaf } from 'obsidian';
-import { transform, IFeatures } from 'markmap-lib';
+import { EventRef, ItemView, Menu, Vault, Workspace, WorkspaceLeaf } from 'obsidian';
+import { transform } from 'markmap-lib';
 import { Markmap } from 'markmap-view';
 import { INode } from 'markmap-common';
-import { MM_VIEW_TYPE } from './constants';
+import { MD_VIEW_TYPE, MM_VIEW_TYPE } from './constants';
 import ObsidianMarkmap from './obsidian-markmap-plugin';
+import { createSVG, getComputedCss, removeExistingSVG } from './markmap-svg';
+import { copyImageToClipboard } from './copy-image';
 
 export default class MindmapView extends ItemView {
     filePath: string;
@@ -15,6 +17,7 @@ export default class MindmapView extends ItemView {
     workspace: Workspace;
     listeners: EventRef[];
     emptyDiv: HTMLDivElement;
+    svg: SVGElement;
     obsMarkmap: ObsidianMarkmap;
 
     getViewType(): string {
@@ -27,6 +30,17 @@ export default class MindmapView extends ItemView {
 
     getIcon() {
         return "dot-network";
+    }
+
+    onMoreOptionsMenu(menu: Menu) {    
+        menu.addItem((item) => 
+            item
+                .setIcon('image-file')
+                .setTitle('Copy screenshot')
+                .onClick(() => copyImageToClipboard(this.svg))
+
+        );
+        menu.showAtPosition({x: 0, y: 0});
     }
 
     constructor(leaf: WorkspaceLeaf, initialFileInfo: {path:string, basename:string}){
@@ -81,14 +95,14 @@ export default class MindmapView extends ItemView {
     async update(){
         if(this.filePath) {
             await this.readMarkDown();
-            if(this.currentMd.length === 0){
+            if(this.currentMd.length === 0 || this.getLeafTarget().view.getViewType() != MD_VIEW_TYPE){
                 this.displayEmpty(true);
-                this.removeExistingSVG();
+                removeExistingSVG();
             } else {
-                const { root } = await this.transformMarkdown();
+                const { root, features } = await this.transformMarkdown();
                 this.displayEmpty(false);
-                const svg = this.createSVG();
-                this.renderMarkmap(root, svg);
+                this.svg = createSVG(this.containerEl);
+                this.renderMarkmap(root, this.svg);
             }
         }
         this.displayText = this.fileName != undefined ? `Mind Map of ${this.fileName}` : 'Mind Map'; 
@@ -130,32 +144,17 @@ export default class MindmapView extends ItemView {
         return { root, features };
     }
     
-    createSVG(): SVGElement {
-        this.removeExistingSVG();
-        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg') as unknown as SVGElement;
-        svg.id = 'markmap';
-        svg.setAttr('style', 'height: 100%; width: 100%');
-        const container = this.containerEl.children[1];
-        container.appendChild(svg);
-        return svg;
-    }
-
-    removeExistingSVG() {
-        const existing = document.getElementById('markmap');
-        if(existing) {
-            existing.parentElement.removeChild(existing);
-        }
-    }
-    
     async renderMarkmap(root: INode, svg: SVGElement) {
+        const { font } = getComputedCss(this.containerEl);
         const options = {
             autoFit: false,
-            duration: 10
+            duration: 10,
+            nodeFont: font
           };
           try {
             const markmapSVG = Markmap.create(svg, options, root);
           } catch (error) {
-              console.log(error);
+              console.error(error);
           }
     }
 
@@ -164,7 +163,7 @@ export default class MindmapView extends ItemView {
             const div = document.createElement('div')
             div.className = 'pane-empty';
             div.innerText = 'No content found';
-            this.removeExistingSVG();
+            removeExistingSVG();
             this.containerEl.children[1].appendChild(div);
             this.emptyDiv = div;
         } 

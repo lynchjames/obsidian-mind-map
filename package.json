@@ -1,7 +1,7 @@
 {
-  "name": "obsidian-day-planner",
-  "version": "0.1.0",
-  "description": "A plugin to help you plan your day and setup pomodoro timers",
+  "name": "obsidian-mind-map",
+  "version": "0.1.2",
+  "description": "An Obsidian plugin for displaying markdown notes as mind maps using Markmap",
   "main": "main.js",
   "scripts": {
     "dev": "rollup --config rollup.config.js -w",
