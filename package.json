@@ -1,6 +1,6 @@
 {
   "name": "obsidian-mind-map",
-  "version": "0.1.2",
+  "version": "1.0.0",
   "description": "An Obsidian plugin for displaying markdown notes as mind maps using Markmap",
   "main": "main.js",
   "scripts": {

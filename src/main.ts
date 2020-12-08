@@ -4,15 +4,14 @@ import {
     Workspace,
     WorkspaceLeaf, 
   } from 'obsidian';
-  import type { Editor } from 'codemirror';
-import MarkMapView from './markmap-view';
+import MindmapView from './mindmap-view';
 import { MM_VIEW_TYPE } from './constants';
 
   
   export default class MarkMap extends Plugin {
     vault: Vault;
     workspace: Workspace;
-    markMapView: MarkMapView;
+    markMapView: MindmapView;
     
     async onload() {
       console.log("Loading Mind Map plugin");
@@ -22,7 +21,7 @@ import { MM_VIEW_TYPE } from './constants';
       this.registerView(
         MM_VIEW_TYPE,
         (leaf: WorkspaceLeaf) =>
-          (this.markMapView = new MarkMapView(leaf, {path:this.activeLeafPath(this.workspace), basename: this.activeLeafName(this.workspace)}))
+          (this.markMapView = new MindmapView(leaf, {path:this.activeLeafPath(this.workspace), basename: this.activeLeafName(this.workspace)}))
       );
       
       this.addCommand({
@@ -44,7 +43,7 @@ import { MM_VIEW_TYPE } from './constants';
         return;
       }
       const preview = this.app.workspace.splitActiveLeaf('horizontal');
-      const mmPreview = new MarkMapView(preview, fileInfo);
+      const mmPreview = new MindmapView(preview, fileInfo);
       preview.open(mmPreview);
     }
       
