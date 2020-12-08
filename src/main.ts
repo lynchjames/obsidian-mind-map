@@ -11,7 +11,7 @@ import { MM_VIEW_TYPE } from './constants';
   export default class MarkMap extends Plugin {
     vault: Vault;
     workspace: Workspace;
-    markMapView: MindmapView;
+    mindmapView: MindmapView;
     
     async onload() {
       console.log("Loading Mind Map plugin");
@@ -21,7 +21,7 @@ import { MM_VIEW_TYPE } from './constants';
       this.registerView(
         MM_VIEW_TYPE,
         (leaf: WorkspaceLeaf) =>
-          (this.markMapView = new MindmapView(leaf, {path:this.activeLeafPath(this.workspace), basename: this.activeLeafName(this.workspace)}))
+          (this.mindmapView = new MindmapView(leaf, {path:this.activeLeafPath(this.workspace), basename: this.activeLeafName(this.workspace)}))
       );
       
       this.addCommand({
