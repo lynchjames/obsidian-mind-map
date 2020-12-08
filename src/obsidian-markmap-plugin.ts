@@ -18,12 +18,20 @@ export default class ObsidianMarkmap {
 
     private replaceInternalLinks(node: INode){
         const matches = this.parseValue(node.v);
-        matches.forEach(match => {
-            const linkText = match[1];
-            const url = `obsidian://vault/${this.vaultName}/${encodeURI(getLinkpath(linkText))}`;
+        console.log(node.v);
+        for (let i = 0; i < matches.length; i++) {
+            const match = matches[i];
+            const isWikiLink = match.groups['wikitext'];
+            const linkText = isWikiLink ? match.groups['wikitext'] : match.groups['mdtext'];
+            const linkPath = isWikiLink ? linkText : match.groups['mdpath'];
+            if(linkPath.startsWith('http')){
+                continue;
+            }
+            const url = `obsidian://open?vault=${this.vaultName}&file=${isWikiLink ? encodeURI(getLinkpath(linkPath)) : linkPath}`;
             const link = `<a href=\"${url}\">${linkText}</a>`;
-            node.v = node.v.replace(/\[\[.*\]\]/, link);
-        });
+            console.log(match);
+            node.v = node.v.replace(match[0], link);
+        }
     }
 
     private parseValue(v: string) {
