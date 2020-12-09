@@ -6,17 +6,21 @@ import {
   } from 'obsidian';
 import MindmapView from './mindmap-view';
 import { MM_VIEW_TYPE } from './constants';
+import { MindMapSettings } from './settings';
+import { MindMapSettingsTab } from './settings-tab';
 
   
-  export default class MarkMap extends Plugin {
+  export default class MindMap extends Plugin {
     vault: Vault;
     workspace: Workspace;
     mindmapView: MindmapView;
+    settings: MindMapSettings;
     
     async onload() {
       console.log("Loading Mind Map plugin");
       this.vault = this.app.vault;
       this.workspace = this.app.workspace;
+      this.settings = (await this.loadData()) || new MindMapSettings();
 
       this.registerView(
         MM_VIEW_TYPE,
@@ -31,6 +35,8 @@ import { MM_VIEW_TYPE } from './constants';
         hotkeys: []
       });
 
+      this.addSettingTab(new MindMapSettingsTab(this.app, this));
+
     }
 
     markMapPreview() {
@@ -42,7 +48,7 @@ import { MM_VIEW_TYPE } from './constants';
       if (this.app.workspace.getLeavesOfType(MM_VIEW_TYPE).length > 0) {
         return;
       }
-      const preview = this.app.workspace.splitActiveLeaf('horizontal');
+      const preview = this.app.workspace.splitActiveLeaf(this.settings.splitDirection);
       const mmPreview = new MindmapView(preview, fileInfo);
       preview.open(mmPreview);
     }
