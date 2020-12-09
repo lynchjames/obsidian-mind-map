@@ -78,7 +78,7 @@ export default class MindmapView extends ItemView {
                 this.update();
             }
         } catch (error) {
-            console.log(error)
+            console.error(error)
         }
     }
 

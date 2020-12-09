@@ -18,7 +18,6 @@ export default class ObsidianMarkmap {
 
     private replaceInternalLinks(node: INode){
         const matches = this.parseValue(node.v);
-        console.log(node.v);
         for (let i = 0; i < matches.length; i++) {
             const match = matches[i];
             const isWikiLink = match.groups['wikitext'];
@@ -29,7 +28,6 @@ export default class ObsidianMarkmap {
             }
             const url = `obsidian://open?vault=${this.vaultName}&file=${isWikiLink ? encodeURI(getLinkpath(linkPath)) : linkPath}`;
             const link = `<a href=\"${url}\">${linkText}</a>`;
-            console.log(match);
             node.v = node.v.replace(match[0], link);
         }
     }
