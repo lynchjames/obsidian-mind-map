@@ -20,6 +20,21 @@ You can open the Mind Map preview for the current note with a command.
 
 ![Mind Map Preview Command](https://raw.githubusercontent.com/lynchjames/obsidian-mind-map/main/images/mind-map-preview-command.png)
 
+
+### Preview More Options Menu
+
+The Mind Map Preview view has 2 options from the "more options" menu:
+
+![Mind Map Preview More Options](https://raw.githubusercontent.com/lynchjames/obsidian-mind-map/main/images/mind-map-view-more-options.png)
+
+#### Pin
+
+Allows you to pin the Mind Map preview pane to the current note so that you can select other notes with the current Mind Map remaining in place. A pin icon will appear in the header of the Mind Map preview pane. Click the pin icon to unpin.
+
+#### Copy screenshot
+
+Places a copy of the Mind Map SVG on your clipboard allowing you to paste it into a note in Obsidian or into an image editor of your choice.
+
 ## Compatibility
 
 Custom plugins are only available for Obsidian v0.9.7+.
