@@ -19,6 +19,8 @@ export default class MindmapView extends ItemView {
     emptyDiv: HTMLDivElement;
     svg: SVGElement;
     obsMarkmap: ObsidianMarkmap;
+    isLeafPinned: boolean;
+    pinAction: HTMLElement;
 
     getViewType(): string {
         return MM_VIEW_TYPE;
@@ -33,12 +35,19 @@ export default class MindmapView extends ItemView {
     }
 
     onMoreOptionsMenu(menu: Menu) {    
-        menu.addItem((item) => 
+        menu
+        .addItem((item) => 
             item
-                .setIcon('image-file')
-                .setTitle('Copy screenshot')
-                .onClick(() => copyImageToClipboard(this.svg))
-
+            .setIcon('pin')
+            .setTitle('Pin')
+            .onClick(() => this.pinCurrentLeaf())
+        )
+        .addSeparator()
+        .addItem((item) => 
+            item
+            .setIcon('image-file')
+            .setTitle('Copy screenshot')
+            .onClick(() => copyImageToClipboard(this.svg))  
         );
         menu.showAtPosition({x: 0, y: 0});
     }
@@ -58,8 +67,8 @@ export default class MindmapView extends ItemView {
             this.workspace.on('layout-ready', () => this.update()),
             this.workspace.on('resize', () => this.update()),
             this.workspace.on('css-change', () => this.update()),
+            this.leaf.on('group-change', (group) => this.updateLinkedLeaf(group, this))
         ];
-        // this.leaf.on('group-change', (group) => this.updateLinkedLeaf(group, this));
     }
 
     async onClose() {
@@ -90,6 +99,17 @@ export default class MindmapView extends ItemView {
         const mdLinkedLeaf = mmView.workspace.getGroupLeaves(group).filter(l => l.view.getViewType() === MM_VIEW_TYPE)[0];
         mmView.linkedLeaf = mdLinkedLeaf;
         this.checkAndUpdate();
+    }
+
+    pinCurrentLeaf() {
+        this.isLeafPinned = true;
+        this.pinAction = this.addAction('filled-pin', 'Pin', () => this.unPin(), 20);
+        this.pinAction.classList.add('is-active');
+    }
+
+    unPin() {
+        this.isLeafPinned = false;
+        this.pinAction.parentNode.removeChild(this.pinAction);
     }
 
     async update(){
@@ -127,7 +147,10 @@ export default class MindmapView extends ItemView {
         return pathHasChanged;
     }
     
-    getLeafTarget() {;
+    getLeafTarget() {
+        if(!this.isLeafPinned){
+            this.linkedLeaf = this.app.workspace.activeLeaf;
+        }
         return this.linkedLeaf != undefined ? this.linkedLeaf : this.app.workspace.activeLeaf;
     }
 
