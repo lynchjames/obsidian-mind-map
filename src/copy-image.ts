@@ -26,14 +26,15 @@ function generateImage(svg: SVGElement, canvas: HTMLCanvasElement, callback: () 
 function drawInlineSVG(ctx: CanvasRenderingContext2D, svg: SVGElement, callback: () => void): HTMLImageElement {
 
     // get svg data
-    var xml = new XMLSerializer().serializeToString(svg);
+    const xml = new XMLSerializer().serializeToString(svg);
 
     // make it base64
-    var svg64 = btoa(xml);
-    var b64Start = 'data:image/svg+xml;base64,';
+    const svg64 = btoa(unescape(encodeURIComponent(xml)))
+
+    const b64Start = 'data:image/svg+xml;base64,';
 
     // prepend a "header"
-    var image64 = b64Start + svg64;
+    const image64 = b64Start + svg64;
 
     const img = new Image();
     // set it as the source of the img element
