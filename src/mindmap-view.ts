@@ -156,7 +156,6 @@ export default class MindmapView extends ItemView {
 
     async readMarkDown() {
         let md = await this.app.vault.adapter.read(this.filePath);
-        console.log(md.substring(0, 5));
         if(md.startsWith('---')) {
             md = md.replace(FRONT_MATTER_REGEX, '');
         }
