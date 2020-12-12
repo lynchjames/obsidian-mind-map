@@ -25,7 +25,7 @@ import { MindMapSettingsTab } from './settings-tab';
       this.registerView(
         MM_VIEW_TYPE,
         (leaf: WorkspaceLeaf) =>
-          (this.mindmapView = new MindmapView(leaf, {path:this.activeLeafPath(this.workspace), basename: this.activeLeafName(this.workspace)}))
+          (this.mindmapView = new MindmapView(this.settings, leaf, {path:this.activeLeafPath(this.workspace), basename: this.activeLeafName(this.workspace)}))
       );
       
       this.addCommand({
@@ -49,7 +49,7 @@ import { MindMapSettingsTab } from './settings-tab';
         return;
       }
       const preview = this.app.workspace.splitActiveLeaf(this.settings.splitDirection);
-      const mmPreview = new MindmapView(preview, fileInfo);
+      const mmPreview = new MindmapView(this.settings, preview, fileInfo);
       preview.open(mmPreview);
     }
       

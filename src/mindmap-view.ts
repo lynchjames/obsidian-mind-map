@@ -6,6 +6,7 @@ import { FRONT_MATTER_REGEX, MD_VIEW_TYPE, MM_VIEW_TYPE } from './constants';
 import ObsidianMarkmap from './obsidian-markmap-plugin';
 import { createSVG, getComputedCss, removeExistingSVG } from './markmap-svg';
 import { copyImageToClipboard } from './copy-image';
+import { MindMapSettings } from './settings';
 
 export default class MindmapView extends ItemView {
     filePath: string;
@@ -21,6 +22,7 @@ export default class MindmapView extends ItemView {
     obsMarkmap: ObsidianMarkmap;
     isLeafPinned: boolean;
     pinAction: HTMLElement;
+    settings: MindMapSettings;
 
     getViewType(): string {
         return MM_VIEW_TYPE;
@@ -52,8 +54,9 @@ export default class MindmapView extends ItemView {
         menu.showAtPosition({x: 0, y: 0});
     }
 
-    constructor(leaf: WorkspaceLeaf, initialFileInfo: {path:string, basename:string}){
+    constructor(settings: MindMapSettings, leaf: WorkspaceLeaf, initialFileInfo: {path:string, basename:string}){
         super(leaf);
+        this.settings = settings;
         this.filePath = initialFileInfo.path;
         this.fileName = initialFileInfo.basename; 
         this.vault = this.app.vault;
@@ -175,7 +178,10 @@ export default class MindmapView extends ItemView {
         const options = {
             autoFit: false,
             duration: 10,
-            nodeFont: font
+            nodeFont: font,
+            nodeMinHeight: this.settings.nodeMinHeight ?? 16,
+            spacingVertical: this.settings.spacingVertical ?? 5,
+            spacingHorizontal: this.settings.spacingHorizontal ?? 80
           };
           try {
             const markmapSVG = Markmap.create(svg, options, root);
@@ -193,7 +199,6 @@ export default class MindmapView extends ItemView {
             this.containerEl.children[1].appendChild(div);
             this.emptyDiv = div;
         } 
-        const style = display ? 'display: block' : 'display: none';
-        this.emptyDiv.setAttr('style', style);
+        this.emptyDiv.toggle(display);
     }
 }
