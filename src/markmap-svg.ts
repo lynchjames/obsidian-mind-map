@@ -1,4 +1,4 @@
-export function createSVG(containerEl: HTMLElement): SVGElement {
+export function createSVG(containerEl: HTMLElement, lineHeight: string): SVGElement {
     removeExistingSVG();
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg') as unknown as SVGElement;
     svg.id = 'markmap';
@@ -8,7 +8,7 @@ export function createSVG(containerEl: HTMLElement): SVGElement {
     const { color } = getComputedCss(containerEl);
     style.innerHTML = `#markmap div {
         color: ${color};
-        line-height: 1em;
+        line-height: ${lineHeight ?? '1em'};
     }`;
     svg.appendChild(style);
     container.appendChild(svg);

@@ -43,6 +43,18 @@ export class MindMapSettingsTab extends PluginSettingTab {
                         this.plugin.saveData(this.plugin.settings);
                     }));
 
+        new Setting(containerEl)
+            .setName('Node Text Line Height')
+            .setDesc('Line height for content in mind map nodes')
+            .addText(text =>
+                text
+                    .setValue(this.plugin.settings.lineHeight?.toString())
+                    .setPlaceholder('Example: 1em')
+                    .onChange((value: string) => {
+                        this.plugin.settings.lineHeight = value;
+                        this.plugin.saveData(this.plugin.settings);
+                    }));
+
 
         new Setting(containerEl)
             .setName('Vertical Spacing')
@@ -66,6 +78,18 @@ export class MindMapSettingsTab extends PluginSettingTab {
                     .setPlaceholder('Example: 80')
                     .onChange((value: string) => {
                         this.plugin.settings.spacingHorizontal = Number.parseInt(value);
+                        this.plugin.saveData(this.plugin.settings);
+                    }));
+
+        new Setting(containerEl)
+            .setName('Horizontal padding')
+            .setDesc('Leading space before the content of mind map nodes')
+            .addText(text =>
+                text
+                    .setValue(this.plugin.settings.paddingX?.toString())
+                    .setPlaceholder('Example: 8')
+                    .onChange((value: string) => {
+                        this.plugin.settings.paddingX = Number.parseInt(value);
                         this.plugin.saveData(this.plugin.settings);
                     }));
     }

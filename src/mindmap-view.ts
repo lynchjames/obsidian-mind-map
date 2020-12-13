@@ -7,6 +7,7 @@ import ObsidianMarkmap from './obsidian-markmap-plugin';
 import { createSVG, getComputedCss, removeExistingSVG } from './markmap-svg';
 import { copyImageToClipboard } from './copy-image';
 import { MindMapSettings } from './settings';
+import { IMarkmapOptions } from 'markmap-view/types/types';
 
 export default class MindmapView extends ItemView {
     filePath: string;
@@ -107,7 +108,7 @@ export default class MindmapView extends ItemView {
     pinCurrentLeaf() {
         this.isLeafPinned = true;
         this.pinAction = this.addAction('filled-pin', 'Pin', () => this.unPin(), 20);
-        this.pinAction.classList.add('is-active');
+        this.pinAction.addClass('is-active');
     }
 
     unPin() {
@@ -124,7 +125,7 @@ export default class MindmapView extends ItemView {
             } else {
                 const { root, features } = await this.transformMarkdown();
                 this.displayEmpty(false);
-                this.svg = createSVG(this.containerEl);
+                this.svg = createSVG(this.containerEl, this.settings.lineHeight);
                 this.renderMarkmap(root, this.svg);
             }
         }
@@ -175,13 +176,14 @@ export default class MindmapView extends ItemView {
     
     async renderMarkmap(root: INode, svg: SVGElement) {
         const { font } = getComputedCss(this.containerEl);
-        const options = {
+        const options: IMarkmapOptions = {
             autoFit: false,
             duration: 10,
             nodeFont: font,
             nodeMinHeight: this.settings.nodeMinHeight ?? 16,
             spacingVertical: this.settings.spacingVertical ?? 5,
-            spacingHorizontal: this.settings.spacingHorizontal ?? 80
+            spacingHorizontal: this.settings.spacingHorizontal ?? 80,
+            paddingX: this.settings.paddingX ?? 8
           };
           try {
             const markmapSVG = Markmap.create(svg, options, root);
