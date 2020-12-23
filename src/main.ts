@@ -20,7 +20,14 @@ import { MindMapSettingsTab } from './settings-tab';
       console.log("Loading Mind Map plugin");
       this.vault = this.app.vault;
       this.workspace = this.app.workspace;
-      this.settings = (await this.loadData()) || new MindMapSettings();
+      this.settings = Object.assign({
+        splitDirection: 'Horizontal',
+        nodeMinHeight: 16,
+        lineHeight: '1em',
+        spacingVertical: 5,
+        spacingHorizontal: 80,
+        paddingX: 8
+    }, await this.loadData());
 
       this.registerView(
         MM_VIEW_TYPE,
