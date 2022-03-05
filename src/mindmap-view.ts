@@ -6,6 +6,7 @@ import { FRONT_MATTER_REGEX, MD_VIEW_TYPE, MM_VIEW_TYPE } from './constants';
 import ObsidianMarkmap from './obsidian-markmap-plugin';
 import { createSVG, getComputedCss, removeExistingSVG } from './markmap-svg';
 import { copyImageToClipboard } from './copy-image';
+import { exportSVG } from './export-image';
 import { MindMapSettings } from './settings';
 import { IMarkmapOptions } from 'markmap-view/types/types';
 
@@ -48,9 +49,15 @@ export default class MindmapView extends ItemView {
         .addSeparator()
         .addItem((item) => 
             item
-            .setIcon('image-file')
+            .setIcon('documents')
             .setTitle('Copy screenshot')
-            .onClick(() => copyImageToClipboard(this.svg))  
+            .onClick(() => copyImageToClipboard(this.svg))
+        )
+        .addItem((item) =>
+            item
+            .setIcon('image-file')
+            .setTitle('Export SVG')
+            .onClick(() => exportSVG(this.svg))
         );
         menu.showAtPosition({x: 0, y: 0});
     }
