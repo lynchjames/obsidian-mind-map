@@ -7,4 +7,5 @@ export class MindMapSettings {
     spacingVertical: number = 5;
     spacingHorizontal: number = 80;
     paddingX: number = 8;
+    initialExpandLevel: number = 1
 }
