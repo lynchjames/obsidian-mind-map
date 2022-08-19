@@ -21,8 +21,14 @@ export default class ObsidianMarkmap {
         for (let i = 0; i < matches.length; i++) {
             const match = matches[i];
             const isWikiLink = match.groups['wikitext'];
-            const linkText = isWikiLink ? match.groups['wikitext'] : match.groups['mdtext'];
-            const linkPath = isWikiLink ? linkText : match.groups['mdpath'];
+            var linkText, linkPath;
+            if (isWikiLink) {
+                linkText = match.groups['wikialias'] ? match.groups['wikialias'] : match.groups['wikitext'];
+                linkPath = match.groups['wikitext'];
+            } else {
+                linkText = match.groups['mdtext'];
+                linkPath = match.groups['mdpath'];
+            }
             if(linkPath.startsWith('http')){
                 continue;
             }
