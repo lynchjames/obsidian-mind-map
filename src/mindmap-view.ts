@@ -2,7 +2,7 @@ import { EventRef, ItemView, Menu, Vault, Workspace, WorkspaceLeaf } from 'obsid
 import { transform } from 'markmap-lib';
 import { Markmap } from 'markmap-view';
 import { INode } from 'markmap-common';
-import { FRONT_MATTER_REGEX, MD_VIEW_TYPE, MM_VIEW_TYPE } from './constants';
+import { FRONT_MATTER_REGEX, TAG_REGEX, MD_VIEW_TYPE, MM_VIEW_TYPE } from './constants';
 import ObsidianMarkmap from './obsidian-markmap-plugin';
 import { createSVG, getComputedCss, removeExistingSVG } from './markmap-svg';
 import { copyImageToClipboard } from './copy-image';
@@ -162,6 +162,9 @@ export default class MindmapView extends ItemView {
         let md = await this.app.vault.adapter.read(this.filePath);
         if(md.startsWith('---')) {
             md = md.replace(FRONT_MATTER_REGEX, '');
+        }
+        if(md.startsWith('#')) {
+            md = md.replace(TAG_REGEX, '');
         }
         const markDownHasChanged = this.currentMd != md;
         this.currentMd = md;
