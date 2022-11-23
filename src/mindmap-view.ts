@@ -1,13 +1,12 @@
 import { EventRef, ItemView, Menu, Vault, Workspace, WorkspaceLeaf } from 'obsidian';
-import { transform } from 'markmap-lib';
+import { Transformer } from 'markmap-lib';
 import { Markmap } from 'markmap-view';
 import { INode } from 'markmap-common';
 import { FRONT_MATTER_REGEX, MD_VIEW_TYPE, MM_VIEW_TYPE } from './constants';
 import ObsidianMarkmap from './obsidian-markmap-plugin';
-import { createSVG, getComputedCss, removeExistingSVG } from './markmap-svg';
+import { createSVG, removeExistingSVG } from './markmap-svg';
 import { copyImageToClipboard } from './copy-image';
 import { MindMapSettings } from './settings';
-import { IMarkmapOptions } from 'markmap-view/types/types';
 
 export default class MindmapView extends ItemView {
     filePath: string;
@@ -169,21 +168,22 @@ export default class MindmapView extends ItemView {
     }
     
     async transformMarkdown() {
-        const { root, features } = transform(this.currentMd);
+        const { root, features } = new Transformer().transform(this.currentMd);
         this.obsMarkmap.updateInternalLinks(root);
         return { root, features };
     }
     
     async renderMarkmap(root: INode, svg: SVGElement) {
-        const { font } = getComputedCss(this.containerEl);
-        const options: IMarkmapOptions = {
-            autoFit: false,
-            duration: 10,
-            nodeFont: font,
-            nodeMinHeight: this.settings.nodeMinHeight ?? 16,
-            spacingVertical: this.settings.spacingVertical ?? 5,
-            spacingHorizontal: this.settings.spacingHorizontal ?? 80,
-            paddingX: this.settings.paddingX ?? 8
+        const options = {
+          ...Markmap.defaultOptions,
+          ...{
+              autoFit: false,
+              duration: 10,
+              nodeMinHeight: this.settings.nodeMinHeight ?? 16,
+              spacingVertical: this.settings.spacingVertical ?? 5,
+              spacingHorizontal: this.settings.spacingHorizontal ?? 80,
+              paddingX: this.settings.paddingX ?? 8
+            }
           };
           try {
             const markmapSVG = Markmap.create(svg, options, root);
