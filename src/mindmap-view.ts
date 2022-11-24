@@ -66,8 +66,8 @@ export default class MindmapView extends ItemView {
     async onOpen() {
         this.obsMarkmap = new ObsidianMarkmap(this.vault);
         this.registerActiveLeafUpdate();
+        this.workspace.onLayoutReady(() => this.update()),
         this.listeners = [
-            this.workspace.on('layout-ready', () => this.update()),
             this.workspace.on('resize', () => this.update()),
             this.workspace.on('css-change', () => this.update()),
             this.leaf.on('group-change', (group) => this.updateLinkedLeaf(group, this))
