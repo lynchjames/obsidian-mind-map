@@ -182,7 +182,8 @@ export default class MindmapView extends ItemView {
               nodeMinHeight: this.settings.nodeMinHeight ?? 16,
               spacingVertical: this.settings.spacingVertical ?? 5,
               spacingHorizontal: this.settings.spacingHorizontal ?? 80,
-              paddingX: this.settings.paddingX ?? 8
+              paddingX: this.settings.paddingX ?? 8,
+              initialExpandLevel: this.settings.initialExpandLevel ?? -1,
             }
           };
           try {

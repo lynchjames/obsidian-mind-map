@@ -92,5 +92,17 @@ export class MindMapSettingsTab extends PluginSettingTab {
                         this.plugin.settings.paddingX = Number.parseInt(value);
                         this.plugin.saveData(this.plugin.settings);
                     }));
+        
+        new Setting(containerEl)
+            .setName('Initial Expand Level')
+            .setDesc('How many nodes to initially have expanded when opening the mind map (default of -1 expands all)')
+            .addText(text =>
+                text
+                    .setValue(this.plugin.settings.initialExpandLevel?.toString())
+                    .setPlaceholder('Example: 3')
+                    .onChange((value: string) => {
+                        this.plugin.settings.initialExpandLevel = Number.parseInt(value);
+                        this.plugin.saveData(this.plugin.settings);
+                    }));
     }
 }

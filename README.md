@@ -16,10 +16,14 @@ A similar plugin is available for [Visual Studio Code](https://marketplace.visua
 
 ## Usage
 
-You can open the Mind Map preview for the current note with a command.
+There are several commands.
 
-![Mind Map Preview Command](https://raw.githubusercontent.com/lynchjames/obsidian-mind-map/main/images/mind-map-preview-command.png)
+- You can open the Mind Map preview for the current note with a command.
+- You can also fold / unfold the levels shown in the mind map. 
 
+Below the screenshot shows user customized keyboard shortcuts as a suggestion, but they are not set automatically by the plugin.
+
+![Mind Map Commands](https://raw.githubusercontent.com/lynchjames/obsidian-mind-map/main/images/mind-map-commands.png)
 
 ### Preview More Options Menu
 
@@ -44,6 +48,13 @@ The current API of this repo targets Obsidian **v0.9.20**.
 ## Installing
 
 As of version [0.9.7 of Obsidian](https://forum.obsidian.md/t/obsidian-release-v0-9-7-insider-build/7628), this plugin is available to be installed directly from within the app. The plugin can be found in the Community Plugins directory which can be accessed from the Settings pane under Third Party Plugins.
+
+## Options
+
+Options are configured as follows:
+
+![Mind Map Options](https://raw.githubusercontent.com/lynchjames/obsidian-mind-map/main/images/mind-map-plugin-options.png)
+
 
 ## Manual installation
 
