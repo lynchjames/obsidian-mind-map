@@ -11,13 +11,13 @@ export default class ObsidianMarkmap {
 
     updateInternalLinks(node: INode) {
         this.replaceInternalLinks(node);
-        if(node.c){
-            node.c.forEach(n => this.updateInternalLinks(n));
+        if(node.children){
+            node.children.forEach(n => this.updateInternalLinks(n));
         }
     }
 
     private replaceInternalLinks(node: INode){
-        const matches = this.parseValue(node.v);
+        const matches = this.parseValue(node.content);
         for (let i = 0; i < matches.length; i++) {
             const match = matches[i];
             const isWikiLink = match.groups['wikitext'];
@@ -28,7 +28,7 @@ export default class ObsidianMarkmap {
             }
             const url = `obsidian://open?vault=${this.vaultName}&file=${isWikiLink ? encodeURI(getLinkpath(linkPath)) : linkPath}`;
             const link = `<a href=\"${url}\">${linkText}</a>`;
-            node.v = node.v.replace(match[0], link);
+            node.content = node.content.replace(match[0], link);
         }
     }
 

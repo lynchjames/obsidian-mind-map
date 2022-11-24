@@ -6,7 +6,7 @@ import {
   } from 'obsidian';
 import MindmapView from './mindmap-view';
 import { MM_VIEW_TYPE } from './constants';
-import { MindMapSettings } from './settings';
+import { MindMapSettings, MindMapSettingsOverride } from './settings';
 import { MindMapSettingsTab } from './settings-tab';
 
   
@@ -26,7 +26,8 @@ import { MindMapSettingsTab } from './settings-tab';
         lineHeight: '1em',
         spacingVertical: 5,
         spacingHorizontal: 80,
-        paddingX: 8
+        paddingX: 8,
+        initialExpandLevel: -1
     }, await this.loadData());
 
       this.registerView(
@@ -42,21 +43,70 @@ import { MindMapSettingsTab } from './settings-tab';
         hotkeys: []
       });
 
+      this.addCommand({
+        id: 'app:markmap-unfold-all',
+        name: 'Unfold All of the Mind Map',
+        callback: () => this.markMapPreview({initialExpandLevel: -1}),
+        hotkeys: []
+      });
+
+      this.addCommand({
+        id: 'app:markmap-fold-level-1',
+        name: 'Fold Level 1 for the Mind Map',
+        callback: () => this.markMapPreview({initialExpandLevel: 1}),
+        hotkeys: []
+      });
+
+      this.addCommand({
+        id: 'app:markmap-fold-level-2',
+        name: 'Fold Level 2 for the Mind Map',
+        callback: () => this.markMapPreview({initialExpandLevel: 2}),
+        hotkeys: []
+      });
+
+      this.addCommand({
+        id: 'app:markmap-fold-level-3',
+        name: 'Fold Level 3 for the Mind Map',
+        callback: () => this.markMapPreview({initialExpandLevel: 3}),
+        hotkeys: []
+      });
+      
+      this.addCommand({
+        id: 'app:markmap-fold-level-4',
+        name: 'Fold Level 4 for the Mind Map',
+        callback: () => this.markMapPreview({initialExpandLevel: 4}),
+        hotkeys: []
+      });
+
+      this.addCommand({
+        id: 'app:markmap-fold-level-5',
+        name: 'Fold Level 5 for the Mind Map',
+        callback: () => this.markMapPreview({initialExpandLevel: 5}),
+        hotkeys: []
+      });
+
       this.addSettingTab(new MindMapSettingsTab(this.app, this));
 
     }
 
-    markMapPreview() {
+    markMapPreview(settingsOverride?: MindMapSettingsOverride) {
       const fileInfo = {path: this.activeLeafPath(this.workspace), basename: this.activeLeafName(this.workspace)};
-      this.initPreview(fileInfo);
+      this.initPreview(fileInfo, settingsOverride);
     }
 
-    async initPreview(fileInfo: any) {
-      if (this.app.workspace.getLeavesOfType(MM_VIEW_TYPE).length > 0) {
-        return;
+    // initPreview redraws with potentially any settingsOverrides initiated from the commands.
+    async initPreview(fileInfo: any, settingsOverride?: MindMapSettingsOverride) {
+      var preview:WorkspaceLeaf;
+      const mindmapLeaves = this.app.workspace.getLeavesOfType(MM_VIEW_TYPE);
+      if (mindmapLeaves.length == 0) {
+        preview = this.app.workspace.getLeaf('split', this.settings.splitDirection);
+      } else {
+        // Only allow one mindmap preview, so reuse
+        preview = mindmapLeaves[0];
       }
-      const preview = this.app.workspace.splitActiveLeaf(this.settings.splitDirection);
-      const mmPreview = new MindmapView(this.settings, preview, fileInfo);
+
+      // With our leaf, draw the MindMap
+      const mmPreview = new MindmapView({...this.settings, ...settingsOverride}, preview, fileInfo);
       preview.open(mmPreview);
     }
       
