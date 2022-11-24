@@ -56,6 +56,11 @@ Note: On some machines the `.obsidian` folder may be hidden. On MacOS you should
 ## For developers
 Pull requests are both welcome and appreciated. 😀
 
+- Use the version of node that matches what is in `.github/workflows/release.yml`. (If using nvm: `nvm install lts/fermium`, `nvm use lts/fermium`).
+- Get set up with `npm install --verbose`, and then `npm run dev`.
+- Use a test vault with either the `test-vault/` in this repo, or manually install this to another test vault. (You may do so by symlinking, e.g. `ln -s <path to obsidian-mind-map/ <your vault>/.obsidian/plugins/.`, and then symlinking the built artifact to the root git dir `ln -s dist/main.js .`)
+- Since Obsidian desktop is an Electron app, you can use the Chromium developer tools to view an in-app console. `Cmd + Opt + I` on macOS or `Ctrl + Shift + I` on Windows/Linux.
+
 If you would like to contribute to the development of this plugin, please follow the guidelines provided in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Donating
