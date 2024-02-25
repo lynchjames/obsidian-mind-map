@@ -43,7 +43,7 @@ The current API of this repo targets Obsidian **v0.9.20**.
 
 ## Installing
 
-As of version [0.9.7 of Obsidian](https://forum.obsidian.md/t/obsidian-release-v0-9-7-insider-build/7628), this plugin is available to be installed directly from within the app. The plugin can be found in the Community Plugins directory which can be accessed from the Settings pane under Third Party Plugins.
+As of version 0.9.7 of Obsidian, this plugin is available to be installed (directly from within the app)[obsidian://show-plugin?id=obsidian-mind-map]. The plugin can be found in the Community Plugins directory which can be accessed from the Settings pane under Third Party Plugins.
 
 ## Manual installation
 
