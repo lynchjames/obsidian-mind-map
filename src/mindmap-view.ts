@@ -1,5 +1,5 @@
 import { EventRef, ItemView, Menu, Vault, Workspace, WorkspaceLeaf } from 'obsidian';
-import { transform } from 'markmap-lib';
+import { builtInPlugins, setPlugins, transform } from 'markmap-lib';
 import { Markmap } from 'markmap-view';
 import { INode } from 'markmap-common';
 import { FRONT_MATTER_REGEX, MD_VIEW_TYPE, MM_VIEW_TYPE } from './constants';
@@ -8,6 +8,10 @@ import { createSVG, getComputedCss, removeExistingSVG } from './markmap-svg';
 import { copyImageToClipboard } from './copy-image';
 import { MindMapSettings } from './settings';
 import { IMarkmapOptions } from 'markmap-view/types/types';
+
+// Prism's runtime CommonJS language loader is unavailable in Obsidian's bundle.
+// Keep the other built-in plugins and let Remarkable escape code blocks as text.
+setPlugins(builtInPlugins.filter(plugin => plugin.name !== 'prism'));
 
 export default class MindmapView extends ItemView {
     filePath: string;
@@ -152,10 +156,11 @@ export default class MindmapView extends ItemView {
     }
     
     getLeafTarget() {
-        if(!this.isLeafPinned){
-            this.linkedLeaf = this.app.workspace.activeLeaf;
+        const activeLeaf = this.app.workspace.activeLeaf;
+        if(!this.isLeafPinned && activeLeaf?.view.getViewType() === MD_VIEW_TYPE){
+            this.linkedLeaf = activeLeaf;
         }
-        return this.linkedLeaf != undefined ? this.linkedLeaf : this.app.workspace.activeLeaf;
+        return this.linkedLeaf ?? activeLeaf;
     }
 
     async readMarkDown() {

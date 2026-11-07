@@ -55,9 +55,12 @@ import { MindMapSettingsTab } from './settings-tab';
       if (this.app.workspace.getLeavesOfType(MM_VIEW_TYPE).length > 0) {
         return;
       }
+      const sourceLeaf = this.app.workspace.activeLeaf;
       const preview = this.app.workspace.splitActiveLeaf(this.settings.splitDirection);
       const mmPreview = new MindmapView(this.settings, preview, fileInfo);
-      preview.open(mmPreview);
+      mmPreview.linkedLeaf = sourceLeaf;
+      await preview.open(mmPreview);
+      await mmPreview.update();
     }
       
     onunload() {
